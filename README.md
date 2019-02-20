@@ -1,2 +1,0 @@
-# hdpproject
-hdp api demo
