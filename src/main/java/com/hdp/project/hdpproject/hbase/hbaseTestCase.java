@@ -27,10 +27,10 @@ public class hbaseTestCase {
     private Connection connection = null;
 
     static {
-        conf.set("hbase.zookeeper.quorum", "liuyzh1.xdata,liuyzh2.xdata,liuyzh3.xdata");
+        conf.set("hbase.zookeeper.quorum", "node71.xdata,node72.xdata,node73.xdata");
         conf.set("hbase.zookeeper.property.clientPort", "2181");
         //HBase的Master
-        conf.set("hbase.master","liuyzh3.xdata:16000");
+        conf.set("hbase.master","node71.xdata:16000");
         conf.set("zookeeper.znode.parent", "/hbase-unsecure");
         System.setProperty("hadoop.home.dir", System.getProperty("user.dir") + "\\hadoop-2.7.3");
     }
@@ -107,7 +107,7 @@ public class hbaseTestCase {
      */
     @Test
     public void createTable() {
-        String tableName = "student321";
+        String tableName = "student";
         String[] cf1 = {"cf1", "cf2"};
         //HTD需要TableName类型的tableName，创建tablename对象描述表的名称信息
         TableName tbName = TableName.valueOf(tableName);
@@ -140,7 +140,7 @@ public class hbaseTestCase {
      */
     @Test
     public void deleteTable() {
-        String tableName = "student321";
+        String tableName = "student";
         //通过tableName创建表名
         TableName tbName = TableName.valueOf(tableName);
         //获取admin对象
