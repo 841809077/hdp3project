@@ -57,7 +57,7 @@ public class KafkaProducerAnalysis {
         producer.close();
     }
 
-    // 方式三：异步发送消息，增加一个回调函数。单纯的send()方法也是异步请求。
+    // 方式三：异步发送消息，增加一个回调函数。单纯的send()方法也是异步请求
     private static void async_send(Properties props) {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, "async send!");
