@@ -1,7 +1,6 @@
 package com.hdp.project.hdpproject.kafka;
 
 import org.apache.kafka.clients.producer.*;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -33,13 +32,25 @@ public class KafkaProducerAnalysis {
 
     /**
      * @description: 方式一：发后即忘，性能高，可靠性差，易发生信息丢失。
+     * 在ProducerRecord里面指定每条消息的key值，会根据key值来判断发往哪个分区。验证成功。
      * @param: props
      * @return: void
      */
     private static void fireAndForgetSend(Properties props) {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-        ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, "fire and forget send!");
-        producer.send(record);
+        ProducerRecord<String, String> record = null;
+        for (int i = 1; i <= 50; i++) {
+            String messageStr = "你好，这是第" + i + "条数据";
+            record = new ProducerRecord<>(TOPIC, String.valueOf(1), messageStr);
+            //生产者发布消息到KAFKA_TEST，若Topic不存在则自动创建。
+            producer.send(record);
+            try {
+                // 时间间隔1s
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         producer.close();
     }
 
@@ -88,9 +99,9 @@ public class KafkaProducerAnalysis {
 
     public static void main(String[] args) {
         Properties props = initConfig();
-//        fireAndForgetSend(props);
+        fireAndForgetSend(props);
 //        syncSend(props);
-        asyncSend(props);
+//        asyncSend(props);
     }
 
 }
