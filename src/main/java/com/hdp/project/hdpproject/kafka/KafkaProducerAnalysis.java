@@ -23,7 +23,7 @@ public class KafkaProducerAnalysis {
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("client.id", "producer.client.id.demo");
         props.put("retries", 3);
-        // acks有三个匹配项，均为字符串类型，分别为："1"，"0","all或-1"
+        // acks有三个匹配项，均为字符串类型，分别为："1"，"0","all或-1"。
         props.put(ProducerConfig.ACKS_CONFIG, "1");
         // 指定拦截器
         props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, ProducerInterceptorPrefix.class.getName());
@@ -39,9 +39,9 @@ public class KafkaProducerAnalysis {
     private static void fireAndForgetSend(Properties props) {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         ProducerRecord<String, String> record = null;
-        for (int i = 1; i <= 50; i++) {
-            String messageStr = "你好，这是第" + i + "条数据";
-            record = new ProducerRecord<>(TOPIC, String.valueOf(1), messageStr);
+        for (int i = 1; i <= 10; i++) {
+            String messageStr = "睡觉了，这是第" + i + "条数据";
+            record = new ProducerRecord<>(TOPIC, String.valueOf(2), messageStr);
             //生产者发布消息到KAFKA_TEST，若Topic不存在则自动创建。
             producer.send(record);
             try {
