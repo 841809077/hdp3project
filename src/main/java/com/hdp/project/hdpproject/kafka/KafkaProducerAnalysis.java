@@ -36,10 +36,10 @@ public class KafkaProducerAnalysis {
      * @param: props
      * @return: void
      */
-    private static void fireAndForgetSend(Properties props) {
+    private static void fireAndForgetSend(Properties props, int count) {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
         ProducerRecord<String, String> record = null;
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= count; i++) {
             String messageStr = "睡觉了，这是第" + i + "条数据";
             record = new ProducerRecord<>(TOPIC, String.valueOf(2), messageStr);
             //生产者发布消息到KAFKA_TEST，若Topic不存在则自动创建。
@@ -99,7 +99,7 @@ public class KafkaProducerAnalysis {
 
     public static void main(String[] args) {
         Properties props = initConfig();
-        fireAndForgetSend(props);
+        fireAndForgetSend(props, 10);
 //        syncSend(props);
 //        asyncSend(props);
     }
