@@ -67,6 +67,7 @@
 			<version>1.1.1</version>
 		</dependency>
 
+		<!-- lombok工具 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

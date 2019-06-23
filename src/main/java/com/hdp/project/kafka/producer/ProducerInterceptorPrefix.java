@@ -1,4 +1,4 @@
-package com.hdp.project.hdpproject.kafka;
+package com.hdp.project.kafka.producer;
 
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;

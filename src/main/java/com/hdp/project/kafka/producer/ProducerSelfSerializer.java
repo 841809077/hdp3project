@@ -1,4 +1,4 @@
-package com.hdp.project.hdpproject.kafka;
+package com.hdp.project.kafka.producer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -43,5 +43,4 @@ public class ProducerSelfSerializer {
             e.printStackTrace();
         }
     }
-
 }

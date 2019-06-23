@@ -1,4 +1,4 @@
-package com.hdp.project.hdpproject.kafka;
+package com.hdp.project.kafka.producer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Liuyongzhi
- * @description:
+ * @description: 定义Company对象
  * @date 2019/6/20
  */
 @Builder
