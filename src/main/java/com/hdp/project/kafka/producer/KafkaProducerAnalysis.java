@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
 public class KafkaProducerAnalysis {
 
     private static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
-    private static final String TOPIC = "test";
+    private static final String TOPIC = "topic-demo";
 
     private static Properties initConfig() {
         Properties props = new Properties();

@@ -4,17 +4,13 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 /**
  * @author Liuyongzhi
@@ -23,11 +19,11 @@ import java.util.regex.Pattern;
  */
 public class KafkaConsumerAnalysis {
 
-    private static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
-    private static final String TOPIC = "test";
-    private static final String GROUPID = "group.demo";
+    protected static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
+    protected static final String TOPIC = "test";
+    protected static final String GROUPID = "group.demo.test123";
 
-    public static Properties initConfig() {
+    protected static Properties initConfig() {
         Properties props = new Properties();
         // kafka集群所需的broker地址清单
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERLIST);
@@ -67,6 +63,10 @@ public class KafkaConsumerAnalysis {
         try {
             while (true) {
                 ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
+                // 当所有消息都已被消费完毕，则退出循环。
+                if (records.isEmpty()) {
+                    break;
+                }
                 for (ConsumerRecord<String, String> record : records) {
                     System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
                     System.out.println("key = " + record.key() + ", value = " + record.value());
