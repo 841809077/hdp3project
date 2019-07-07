@@ -20,8 +20,8 @@ import java.util.Set;
 public class SeekDemoAssignment {
 
     protected static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
-    protected static final String TOPIC = "test";
-    protected static final String GROUPID = "group.demo.222";
+    protected static final String TOPIC = "test1";
+    protected static final String GROUPID = "group.demo.333";
 
     protected static Properties initConfig() {
         Properties props = new Properties();
@@ -33,7 +33,6 @@ public class SeekDemoAssignment {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUPID);
-//        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "none");
         return props;
     }
 

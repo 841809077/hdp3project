@@ -21,7 +21,7 @@ public class KafkaConsumerAnalysis {
 
     protected static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
     protected static final String TOPIC = "test";
-    protected static final String GROUPID = "group.demo.test123";
+    protected static final String GROUPID = "group.demo.ttt123";
 
     protected static Properties initConfig() {
         Properties props = new Properties();

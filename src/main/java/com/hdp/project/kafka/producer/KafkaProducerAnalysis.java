@@ -47,11 +47,12 @@ public class KafkaProducerAnalysis {
         int numPartitions = partitions.size();
         System.out.println(numPartitions);
         for (int i = 1; i <= count; i++) {
-            String messageStr = "睡觉了，这是第" + i + "条数据";
+            String messageStr = "测试，这是第" + i + "条数据";
             // 当指定发送消息的分区时，程序就不会根据key值再判断发往哪个分区了。
-            record = new ProducerRecord<>(TOPIC, 0, String.valueOf(i), messageStr);
+            record = new ProducerRecord<>(TOPIC, 1, String.valueOf(i), messageStr);
             //生产者发布消息到KAFKA_TEST，若Topic不存在则自动创建。
             producer.send(record);
+            System.out.println(messageStr);
             try {
                 // 时间间隔1s
                 Thread.sleep(1000);
@@ -107,7 +108,7 @@ public class KafkaProducerAnalysis {
 
     public static void main(String[] args) {
         Properties props = initConfig();
-        fireAndForgetSend(props, 10);
+        fireAndForgetSend(props, 100);
 //        syncSend(props);
 //        asyncSend(props);
     }
