@@ -11,7 +11,7 @@ import java.util.Properties;
 
 /**
  * @author Liuyongzhi
- * @description: 测试消息offse提交后，consumed offset、committed offset、position之前的关系
+ * @description: 测试消息offse提交后，consumed offset、committed offset、position之间的关系
  * @date 2019/6/27
  */
 public class TestOffsetAndPosition {
@@ -77,7 +77,7 @@ public class TestOffsetAndPosition {
          *      committed offset is 100
          *      the offset of the next record is 100
          * 结论：
-         *      position = committed offset = consumed offset + 1; position 和 committed offset 并不会一直相同。
+         *      position = committed offset = consumed offset + 1; 但 position 和 committed offset 并不会一直相同。
          */
     }
 }

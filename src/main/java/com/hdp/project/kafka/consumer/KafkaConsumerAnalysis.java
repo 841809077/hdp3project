@@ -9,6 +9,7 @@ import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -19,11 +20,11 @@ import java.util.Properties;
  */
 public class KafkaConsumerAnalysis {
 
-    protected static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
-    protected static final String TOPIC = "test";
-    protected static final String GROUPID = "group.demo.ttt123";
+    private static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
+    private static final String TOPIC = "topic-demo";
+    private static final String GROUPID = "group.demo.ttt";
 
-    protected static Properties initConfig() {
+    private static Properties initConfig() {
         Properties props = new Properties();
         // kafka集群所需的broker地址清单
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERLIST);
@@ -35,6 +36,8 @@ public class KafkaConsumerAnalysis {
         // 指定一个全新的group.id并且将auto.offset.reset设置为earliest可拉取该主题内所有消息记录。
         props.put(ConsumerConfig.GROUP_ID_CONFIG, GROUPID);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        // 关闭offset自动提交
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         return props;
     }
 
@@ -62,12 +65,37 @@ public class KafkaConsumerAnalysis {
 
         try {
             while (true) {
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
+                ConsumerRecords<String, String> records = kafkaConsumer.poll(5000);
+                System.out.println("##############################");
+                System.out.println(records.count());
                 // 当所有消息都已被消费完毕，则退出循环。
                 if (records.isEmpty()) {
                     break;
                 }
-                for (ConsumerRecord<String, String> record : records) {
+
+                // iterator()
+//                Iterator<ConsumerRecord<String, String>> iterator = records.iterator();
+//                while (iterator.hasNext()) {
+//                    ConsumerRecord<String, String> record = iterator.next();
+//                    System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
+//                    System.out.println("key = " + record.key() + ", value = " + record.value());
+//                }
+
+//                for (ConsumerRecord<String, String> record : records) {
+//                    System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
+//                    System.out.println("key = " + record.key() + ", value = " + record.value());
+//                }
+
+                // records(TopicPartition)
+//                for(TopicPartition tp : records.partitions()){
+//                    for(ConsumerRecord record : records.records(tp)){
+//                        System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
+//                        System.out.println("key = " + record.key() + ", value = " + record.value());
+//                    }
+//                }
+
+                // records(String topicName)
+                for(ConsumerRecord record : records.records("topic-test")){
                     System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
                     System.out.println("key = " + record.key() + ", value = " + record.value());
                 }
