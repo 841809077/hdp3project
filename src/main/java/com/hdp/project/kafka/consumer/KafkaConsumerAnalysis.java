@@ -22,14 +22,15 @@ public class KafkaConsumerAnalysis {
 
     private static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
     private static final String TOPIC = "topic-demo";
-    private static final String GROUPID = "group.demo.ttt";
+    private static final String GROUPID = "group.demo.1";
+    private static final String CLIENTID = "consumer.client.id.1";
 
     private static Properties initConfig() {
         Properties props = new Properties();
         // kafka集群所需的broker地址清单
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERLIST);
         // 设定kafkaConsumer对应的客户端id
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, "consumer.client.id.demo");
+        props.put(ConsumerConfig.CLIENT_ID_CONFIG, CLIENTID);
         // 消费者从broker端获取的消息格式都是byte[]数组类型，key和value需要进行反序列化。
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -44,18 +45,18 @@ public class KafkaConsumerAnalysis {
     public static void main(String[] args) {
         Properties props = initConfig();
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<>(props);
-        // 可指定消费多个主题
+        // 1、可指定消费多个主题
 //        kafkaConsumer.subscribe(Arrays.asList(TOPIC));
-        // 以正则表达式匹配主题名称
+        // 2、以正则表达式匹配主题名称
 //        kafkaConsumer.subscribe(Pattern.compile("topic-.*"));
 
-        // 订阅test主题分区编号为0的分区
+        // 3、订阅test主题分区编号为0的分区
 //        kafkaConsumer.assign(Arrays.asList(new TopicPartition(TOPIC, 0)));
 
-        // 需求：通过partitionFor()和assign()来实现订阅主题所有分区
-        // 1、assign()接收一个Collection<TopicPartition>，
-        // 2、先获取指定主题的分区数，
-        // 3、然后通过循环的形式将所有主题与分区的映射以new TopicPartition(topic,partition)的形式添加，传递给assign()
+        // 4、需求：通过partitionFor()和assign()来实现订阅主题所有分区
+            // 1、assign()接收一个Collection<TopicPartition>，
+            // 2、先获取指定主题的分区数，
+            // 3、然后通过循环的形式将所有主题与分区的映射以new TopicPartition(topic,partition)的形式添加，传递给assign()
         List<PartitionInfo> lpi = kafkaConsumer.partitionsFor(TOPIC);
         List<TopicPartition> topicPartitions = new ArrayList<>();
         for (PartitionInfo pif : lpi) {
@@ -65,37 +66,11 @@ public class KafkaConsumerAnalysis {
 
         try {
             while (true) {
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(5000);
+                ConsumerRecords<String, String> records = kafkaConsumer.poll(1000);
                 System.out.println("##############################");
                 System.out.println(records.count());
-                // 当所有消息都已被消费完毕，则退出循环。
-                if (records.isEmpty()) {
-                    break;
-                }
 
-                // iterator()
-//                Iterator<ConsumerRecord<String, String>> iterator = records.iterator();
-//                while (iterator.hasNext()) {
-//                    ConsumerRecord<String, String> record = iterator.next();
-//                    System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
-//                    System.out.println("key = " + record.key() + ", value = " + record.value());
-//                }
-
-//                for (ConsumerRecord<String, String> record : records) {
-//                    System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
-//                    System.out.println("key = " + record.key() + ", value = " + record.value());
-//                }
-
-                // records(TopicPartition)
-//                for(TopicPartition tp : records.partitions()){
-//                    for(ConsumerRecord record : records.records(tp)){
-//                        System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
-//                        System.out.println("key = " + record.key() + ", value = " + record.value());
-//                    }
-//                }
-
-                // records(String topicName)
-                for(ConsumerRecord record : records.records("topic-test")){
+                for (ConsumerRecord<String, String> record : records) {
                     System.out.println("topic = " + record.topic() + ", partition = " + record.partition() + ", offset = " + record.offset());
                     System.out.println("key = " + record.key() + ", value = " + record.value());
                 }
