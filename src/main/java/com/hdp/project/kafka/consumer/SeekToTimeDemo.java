@@ -1,10 +1,6 @@
 package com.hdp.project.kafka.consumer;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
@@ -12,10 +8,10 @@ import java.util.*;
 
 /**
  * @author Liuyongzhi
- * @description: 从指定位移处消费
- * @date 2019/7/1
+ * @description: 获取2019.07.21 18:00之后的消息
+ * @date 2019/7/21
  */
-public class SeekDemoAssignment {
+public class SeekToTimeDemo {
 
     private static final String BROKERLIST = "node71.xdata:6667,node72.xdata:6667,node73.xdata:6667";
     private static final String TOPIC = "topic-demo";
@@ -52,35 +48,23 @@ public class SeekDemoAssignment {
         }
         System.out.println(assignment);
 
-        // 情景一：指定offset消费
-//        for (TopicPartition tp : assignment) {
-//            int offset = 0;
-//            System.out.println("分区 " + tp + " 从 " + offset + " 开始消费");
-//            consumer.seek(tp, offset);
-//        }
+        Map<TopicPartition, Long> timestampToSearch = new HashMap<>();
+        for (TopicPartition tp : assignment) {
+            // 设置查询分区时间戳的条件：获取当前时间前一天之后的消息
+            timestampToSearch.put(tp, System.currentTimeMillis() - 24 * 3600 * 1000);
+        }
 
-        // 情景二：指定分区从头消费
-//        Map<TopicPartition, Long> beginOffsets = consumer.beginningOffsets(assignment);
-//        for (TopicPartition tp : assignment) {
-//            Long offset = beginOffsets.get(tp);
-//            System.out.println("分区 " + tp + " 从 " + offset + " 开始消费");
-//            consumer.seek(tp, offset);
-//        }
+        // timestampToSearch的值为{topic-demo-0=1563709541899, topic-demo-2=1563709541899, topic-demo-1=1563709541899}
+        Map<TopicPartition, OffsetAndTimestamp> offsets = consumer.offsetsForTimes(timestampToSearch);
 
-        // 情景二：指定分区从末尾消费
-//        Map<TopicPartition, Long> endOffsets = consumer.endOffsets(assignment);
-//        for (TopicPartition tp : assignment) {
-//            Long offset = endOffsets.get(tp);
-//            System.out.println("分区 " + tp + " 从 " + offset + " 开始消费");
-//            consumer.seek(tp, offset);
-//        }
-
-        // 方法二：指定分区从头消费
-        consumer.seekToBeginning(assignment);
-
-        // 方法二：指定分区从末尾消费
-//        consumer.seekToEnd(assignment);
-
+        for(TopicPartition tp: assignment){
+            // 获取该分区的offset以及timestamp
+            OffsetAndTimestamp offsetAndTimestamp = offsets.get(tp);
+            // 如果offsetAndTimestamp不为null，则证明当前分区有符合时间戳条件的消息
+            if (offsetAndTimestamp != null) {
+                consumer.seek(tp, offsetAndTimestamp.offset());
+            }
+        }
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
