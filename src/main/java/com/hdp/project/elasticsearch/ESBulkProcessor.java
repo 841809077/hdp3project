@@ -33,7 +33,7 @@ public class ESBulkProcessor {
     private final static int PORT = 9300;
     private TransportClient client;
 
-    protected BulkProcessor bulkProcessor() {
+    private BulkProcessor bulkProcessor() {
 
         // 设置集群名称
         Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
@@ -52,49 +52,43 @@ public class ESBulkProcessor {
                     @Override
                     public void beforeBulk(long executionId,
                                            BulkRequest request) {
-                        System.out.println("---尝试操作" + request.numberOfActions() + "条数据---");
+                        System.out.println("序号：" + executionId + "，开始执行" + request.numberOfActions() + "条数据批量插入");
                     }
 
                     @Override
                     public void afterBulk(long executionId,
                                           BulkRequest request,
                                           BulkResponse response) {
-                        System.out.println("---尝试操作" + request.numberOfActions() + "条数据失败---");
+                        System.out.println("序号：" + executionId + "，执行" + request.numberOfActions() + "条数据批量插入成功");
                     }
 
                     @Override
                     public void afterBulk(long executionId,
                                           BulkRequest request,
                                           Throwable failure) {
-                        System.out.println("---尝试操作" + request.numberOfActions() + "条数据成功---");
+                        System.out.println("序号：" + executionId + " 执行失败，总记录数：" + request.numberOfActions() + "，报错信息为：" + failure.getMessage());
                     }
                 })
                 .setBulkActions(1000)
                 .setBulkSize(new ByteSizeValue(5, ByteSizeUnit.MB))
-                .setFlushInterval(TimeValue.timeValueSeconds(5))
-                .setConcurrentRequests(5)
+                .setFlushInterval(TimeValue.timeValueSeconds(20))
+                .setConcurrentRequests(1)
                 .setBackoffPolicy(
                         BackoffPolicy.exponentialBackoff(TimeValue.timeValueMillis(100), 3))
                 .build();
-
-
     }
 
     public static void main(String[] args) {
         ESBulkProcessor esBulkProcessor = new ESBulkProcessor();
-        for (int i = 0; i < 500; i++) {
-            // 添加单次请求
-            Map<String, Object> m = new HashMap<>();
+        BulkProcessor esBulk = esBulkProcessor.bulkProcessor();
+        Map<String, Object> m = new HashMap<>();
+        for (int i = 5000; i < 10000; i++) {
+            m.clear();
             m.put("test2", i + "ceshi");
-            esBulkProcessor.bulkProcessor().add(new IndexRequest("666", "_doc", String.valueOf(i)).source(m));
+            // 添加单次请求
+            esBulk.add(new IndexRequest("ceshi", "_doc", String.valueOf(i)).source(m));
         }
-        // 添加单次请求
-//        Map<String, Object> m = new HashMap<>();
-//        m.put("test2", "ceshi123");
-//        esBulkProcessor.bulkProcessor().add(new IndexRequest("index123", "_doc", String.valueOf(111)).source(m));
-        esBulkProcessor.bulkProcessor().flush();
-        esBulkProcessor.bulkProcessor().close();
-
+        esBulk.flush();
+        esBulk.close();
     }
-
 }
