@@ -1,4 +1,4 @@
-package com.hdp.project.hbase;
+package com.hdp3.project.hbase;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;

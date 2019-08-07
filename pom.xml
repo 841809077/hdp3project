@@ -8,11 +8,11 @@
 		<version>2.1.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.hdp.project</groupId>
-	<artifactId>hdpproject</artifactId>
+	<groupId>com.hdp3.project</groupId>
+	<artifactId>hdp3project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hdpproject</name>
-	<description>Demo project for hdp</description>
+	<name>hdp3project</name>
+	<description>Demo project for hdp3</description>
 
 	<properties>
 		<java.version>1.8</java.version>

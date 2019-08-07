@@ -1,4 +1,4 @@
-package com.hdp.project.kafka.consumer;
+package com.hdp3.project.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

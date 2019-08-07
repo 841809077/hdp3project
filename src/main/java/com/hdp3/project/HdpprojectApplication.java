@@ -1,4 +1,4 @@
-package com.hdp.project;
+package com.hdp3.project;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

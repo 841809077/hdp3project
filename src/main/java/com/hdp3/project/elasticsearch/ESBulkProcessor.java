@@ -1,4 +1,4 @@
-package com.hdp.project.elasticsearch;
+package com.hdp3.project.elasticsearch;
 
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkProcessor;

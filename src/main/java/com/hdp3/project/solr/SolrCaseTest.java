@@ -1,4 +1,4 @@
-package com.hdp.project.solr;
+package com.hdp3.project.solr;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;

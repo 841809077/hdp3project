@@ -1,4 +1,4 @@
-package com.hdp.project.kafka.producer;
+package com.hdp3.project.kafka.producer;
 
 import org.apache.kafka.common.serialization.Serializer;
 
