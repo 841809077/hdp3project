@@ -37,12 +37,17 @@ public class ESBulkProcessor {
 
     private final static String HOST = "10.6.6.73";
     private final static int PORT = 9300;
+    private final static String CLUSTERNAME = "elasticsearch";
     private TransportClient client;
 
+    /**
+     * @description: BulkProcessor实例的创建
+     * @return org.elasticsearch.action.bulk.BulkProcessor
+     */
     private BulkProcessor bulkProcessor() {
 
         // 设置集群名称
-        Settings settings = Settings.builder().put("cluster.name", "elasticsearch").build();
+        Settings settings = Settings.builder().put("cluster.name", CLUSTERNAME).build();
 
         // 创建客户端
         try {
@@ -172,7 +177,7 @@ public class ESBulkProcessor {
     public static void main(String[] args) {
         ESBulkProcessor esBulkProcessor = new ESBulkProcessor();
 //        esBulkProcessor.mapData();
-//        esBulkProcessor.jsonData();
-        esBulkProcessor.bulkDelete();
+        esBulkProcessor.jsonData();
+//        esBulkProcessor.bulkDelete();
     }
 }
