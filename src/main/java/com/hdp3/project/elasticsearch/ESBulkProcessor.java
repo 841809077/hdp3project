@@ -35,9 +35,9 @@ public class ESBulkProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(ESBulkProcessor.class);
 
-    private final static String HOST = "10.6.6.73";
-    private final static int PORT = 9300;
-    private final static String CLUSTERNAME = "elasticsearch";
+    private static final String HOST = "10.6.6.73";
+    private static final int PORT = 9300;
+    private static final String CLUSTER_NAME = "elasticsearch";
     private TransportClient client;
 
     /**
@@ -47,7 +47,7 @@ public class ESBulkProcessor {
     private BulkProcessor bulkProcessor() {
 
         // 设置集群名称
-        Settings settings = Settings.builder().put("cluster.name", CLUSTERNAME).build();
+        Settings settings = Settings.builder().put("cluster.name", CLUSTER_NAME).build();
 
         // 创建客户端
         try {
